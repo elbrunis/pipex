@@ -7,4 +7,6 @@
 # include <sys/wait.h>
 # include <sys/types.h>
 
+void execute(char **envp, char *argv);
+
 #endif

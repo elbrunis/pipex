@@ -1,7 +1,7 @@
 #include "pipex.h"
 
 // PATH ES IGUAL A CAMINO
-char	*findpath(char **envp, char *cmd)
+static char	*findpath(char **envp, char *cmd)
 {
 	int		i;
 	char	**lst_path;
@@ -45,15 +45,15 @@ void execute(char **envp, char *argv)
 
 }
 
-int	main(int argc, char *argv[], char *envp[])
-{
-	int error;
-	// char *cmd;
+// int	main(int argc, char *argv[], char *envp[])
+// {
+// 	int error;
+// 	// char *cmd;
 
-	if (argc != 2)
-		return (error = ft_printf("Error: faltan argumentos\n"));
+// 	if (argc != 2)
+// 		return (error = ft_printf("Error: faltan argumentos\n"));
 
-	ft_printf("%s\n", argv[1]);
-	execute(envp, argv[1]);
-	return (0);
-}
+// 	ft_printf("%s\n", argv[1]);
+// 	execute(envp, argv[1]);
+// 	return (0);
+// }

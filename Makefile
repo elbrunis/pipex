@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
-SRC = findpath.c
+SRC = pipex.c findpath.c
 OBJ = $(SRC:.c=.o)
 NAME = pipex
 

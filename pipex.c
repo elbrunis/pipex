@@ -1,50 +1,42 @@
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/wait.h>
+#include "pipex.h"
 
-int main(int argc, char *argv[])
+static void proces(int *pfd_close, int *pfd, char *addres, int std1, int std2, int i)
+{
+    int file;
+
+    if (i == 0)
+        file = open(addres, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+    else
+        file = open(addres, O_RDONLY);
+    close(*pfd_close);
+    dup2(*pfd, std1);
+    close(*pfd);
+    dup2(file, std2);
+    close(file);
+}
+// execute(char **envp, char *argv)
+
+int main(int argc, char *argv[], char **envp)
 {
     int p_fd[2];  // Pipe
     pid_t pid1;
-    int file_in, file_out;
 
-    if (argc != 3)
-        return 1;
+    if (argc != 5)
+        ft_printf("Error: faltan argumentos\n");
     pipe(p_fd);
     pid1 = fork();
 
-    if (pid1 == 0) 
+    if(pid1 == 0)
     {
-        printf("Soy el proceso hijo: %i y mi padre es: %i\n", getpid(), getppid());
-
-        file_out = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-        close(p_fd[1]);
-        dup2(p_fd[0], STDIN_FILENO);
-        // close(p_fd[0]);
-
-        dup2(file_out, STDOUT_FILENO);
-        // close(file_out);
-        printf("hola buenas tardes\n");
-        execlp("grep", "grep", "esta", NULL);
-        return 1;
-    } 
-    else 
-    {
-        printf("Soy el proceso padre: %i y mi hijo es: %i\n", getpid(), pid1);
-
-        file_in = open(argv[1], O_RDONLY);
-
-        close(p_fd[0]);
-        dup2(p_fd[1], STDOUT_FILENO);
-        // close(p_fd[1]);
-
-        dup2(file_in, STDIN_FILENO);
-        // close(file_in);
-        execlp("cat", "cat", NULL);
-        return 1;
+        proces(&p_fd[1], &p_fd[0], argv[4], STDIN_FILENO, STDOUT_FILENO, 0); //child proces
+        ft_printf("hola\n");
+        execute(envp, argv[3]);
     }
-    return 0;
+    else
+    {
+        proces(&p_fd[0], &p_fd[1], argv[1], STDOUT_FILENO, STDIN_FILENO, 1); //parent proces
+        execute(envp, argv[2]);
+    }
+    
 }
