@@ -6,7 +6,7 @@
 /*   By: biniesta <biniesta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/05 18:48:23 by biniesta          #+#    #+#             */
-/*   Updated: 2024/12/25 15:45:43 by biniesta         ###   ########.fr       */
+/*   Updated: 2025/03/25 22:03:21 by biniesta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,13 @@
 #  define BUFFER_SIZE 42
 # endif
 
-
 # include <ctype.h>
+# include <fcntl.h>
+# include <stdarg.h>
 # include <stddef.h>
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
-# include <fcntl.h>
-# include <stdarg.h>
 
 typedef struct s_list
 {
@@ -74,19 +73,19 @@ void				ft_lstadd_front(t_list **lst, t_list *new);
 int					ft_lstsize(t_list *lst);
 t_list				*ft_lstnew(void *content);
 // get next line
-char	*free_and_join(char *save, char *read);
-char	*create_line(char *save);
-char	*put_rest(char *save);
-char	*read_file(int fd, char *save);
-char	*get_next_line(int fd);
+char				*free_and_join(char *save, char *read);
+char				*create_line(char *save);
+char				*put_rest(char *save);
+char				*read_file(int fd, char *save);
+char				*get_next_line(int fd);
 // printf
-int		ft_putchar(char c);
-int		ft_printf(const char *format, ...);
-int		ft_putstr(char *str);
-void	ft_put_str(char *str);
-int		ft_putptr(void *ptr);
-int		ft_putint(int num);
-int		ft_putuint(int num);
-int		ft_puthex(unsigned int num);
-int		ft_putm_hex(unsigned int num);
+int					ft_putchar(char c);
+int					ft_printf(const char *format, ...);
+int					ft_putstr(char *str);
+void				ft_put_str(char *str);
+int					ft_putptr(void *ptr);
+int					ft_putint(int num);
+int					ft_putuint(int num);
+int					ft_puthex(unsigned int num);
+int					ft_putm_hex(unsigned int num);
 #endif

@@ -1,42 +1,61 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: biniesta <biniesta@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/23 20:59:46 by biniesta          #+#    #+#             */
+/*   Updated: 2025/03/25 22:05:39 by biniesta         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "pipex.h"
 
-static void proces(int *pfd_close, int *pfd, char *addres, int std1, int std2, int i)
+static void	child_proces(int *fd, char **argv, char **envp)
 {
-    int file;
+	int	file;
 
-    if (i == 0)
-        file = open(addres, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-    else
-        file = open(addres, O_RDONLY);
-    close(*pfd_close);
-    dup2(*pfd, std1);
-    close(*pfd);
-    dup2(file, std2);
-    close(file);
+	file = open(argv[1], O_RDONLY);
+	if (!file)
+		ft_error("no se abrio archivo de lectura");
+	close(fd[0]);
+	dup2(fd[1], STDOUT_FILENO);
+	close(fd[1]);
+	dup2(file, STDIN_FILENO);
+	close(file);
+	execute(envp, argv[2]);
 }
-// execute(char **envp, char *argv)
 
-int main(int argc, char *argv[], char **envp)
+static void	parent_proces(int *fd, char **argv, char **envp)
 {
-    int p_fd[2];  // Pipe
-    pid_t pid1;
+	int	file;
 
-    if (argc != 5)
-        ft_printf("Error: faltan argumentos\n");
-    pipe(p_fd);
-    pid1 = fork();
+	file = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (!file)
+		ft_error("no se abrio archivo de lectura");
+	close(fd[1]);
+	dup2(fd[0], STDIN_FILENO);
+	close(fd[0]);
+	dup2(file, STDOUT_FILENO);
+	close(file);
+	execute(envp, argv[3]);
+}
 
-    if(pid1 == 0)
-    {
-        proces(&p_fd[1], &p_fd[0], argv[4], STDIN_FILENO, STDOUT_FILENO, 0); //child proces
-        ft_printf("hola\n");
-        execute(envp, argv[3]);
-    }
-    else
-    {
-        proces(&p_fd[0], &p_fd[1], argv[1], STDOUT_FILENO, STDIN_FILENO, 1); //parent proces
-        execute(envp, argv[2]);
-    }
-    
+int	main(int argc, char *argv[], char **envp)
+{
+	int		fd[2];
+	pid_t	pid1;
+
+	if (argc != 5)
+		ft_error("faltan argumentos");
+	if (pipe(fd) == -1)
+		ft_error("no se pudo crear el pipe");
+	pid1 = fork();
+	if (pid1 == -1)
+		ft_error("no se pudo crear el fork");
+	if (pid1 == 0)
+		child_proces(fd, argv, envp);
+	else
+		parent_proces(fd, argv, envp);
 }

@@ -6,7 +6,7 @@
 /*   By: biniesta <biniesta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:52:49 by biniesta          #+#    #+#             */
-/*   Updated: 2024/12/25 15:18:10 by biniesta         ###   ########.fr       */
+/*   Updated: 2025/03/25 22:04:47 by biniesta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,3 @@ char	*ft_strchr(const char *s, int c)
 		return ((char *)&s[i]);
 	return (NULL);
 }
-
