@@ -6,7 +6,7 @@
 /*   By: biniesta <biniesta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 21:42:38 by biniesta          #+#    #+#             */
-/*   Updated: 2025/03/25 22:04:07 by biniesta         ###   ########.fr       */
+/*   Updated: 2025/03/27 15:37:15 by biniesta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static char	*findpath(char **envp, char *cmd)
 	char	*temp;
 
 	i = 0;
-	while (ft_strnstr(envp[i], "PATH", 4) == NULL)
+	while (envp[i] && ft_strnstr(envp[i], "PATH", 4) == NULL)
 		i++;
 	lst_path = ft_split(envp[i] + 5, ':');
 	i = 0;
@@ -39,6 +39,7 @@ static char	*findpath(char **envp, char *cmd)
 		free(temp);
 		if (access(path, X_OK) == 0)
 			return (path);
+		free(path);
 		i++;
 	}
 	i = 0;
@@ -52,11 +53,20 @@ void	execute(char **envp, char *argv)
 {
 	char	**cmd;
 	char	*path;
+	int		i;
 
+	i = -1;
+	if (argv[0] == '\0' || argv == NULL)
+		ft_error("escribe el comando");
 	cmd = ft_split(argv, ' ');
 	path = findpath(envp, cmd[0]);
 	if (!path)
-		return ;
+	{
+		while (cmd[++i])
+			free(cmd[i]);
+		free(cmd);
+		ft_error("no se encontro el comando");
+	}
 	if (execve(path, cmd, envp) == -1)
-		ft_printf("no se pudo ejecutar el comando\n");
+		ft_error("no se pudo ejecutar el comando\n");
 }

@@ -6,7 +6,7 @@
 /*   By: biniesta <biniesta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:59:46 by biniesta          #+#    #+#             */
-/*   Updated: 2025/03/25 22:05:39 by biniesta         ###   ########.fr       */
+/*   Updated: 2025/03/27 15:38:57 by biniesta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	child_proces(int *fd, char **argv, char **envp)
 	int	file;
 
 	file = open(argv[1], O_RDONLY);
-	if (!file)
+	if (file == -1)
 		ft_error("no se abrio archivo de lectura");
 	close(fd[0]);
 	dup2(fd[1], STDOUT_FILENO);
@@ -32,8 +32,8 @@ static void	parent_proces(int *fd, char **argv, char **envp)
 	int	file;
 
 	file = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (!file)
-		ft_error("no se abrio archivo de lectura");
+	if (file == -1)
+		ft_error("no se abrio archivo de escritura");
 	close(fd[1]);
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
@@ -57,5 +57,9 @@ int	main(int argc, char *argv[], char **envp)
 	if (pid1 == 0)
 		child_proces(fd, argv, envp);
 	else
+	{
+		waitpid(pid1, NULL, 0);
 		parent_proces(fd, argv, envp);
+	}
+	return (0);
 }
