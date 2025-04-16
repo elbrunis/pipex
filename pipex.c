@@ -48,7 +48,7 @@ int	main(int argc, char *argv[], char **envp)
 	pid_t	pid1;
 
 	if (argc != 5)
-		ft_error("faltan argumentos");
+		ft_error("los argumentos estan mal");
 	if (pipe(fd) == -1)
 		ft_error("no se pudo crear el pipe");
 	pid1 = fork();

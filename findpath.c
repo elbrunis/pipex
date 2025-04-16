@@ -13,6 +13,21 @@
 #include "pipex.h"
 
 // PATH ES IGUAL A CAMINO
+void	free_array(char **array)
+{
+	int	i;
+
+	if (!array)
+		return ;
+	i = 0;
+	if (array)
+	{
+		while (array[i])
+			free(array[i++]);
+		free(array);
+	}
+}
+
 int	ft_error(char *str)
 {
 	ft_putstr_fd("Error: ", 2);
@@ -38,14 +53,15 @@ static char	*findpath(char **envp, char *cmd)
 		path = ft_strjoin((temp = ft_strjoin(lst_path[i], "/")), cmd);
 		free(temp);
 		if (access(path, X_OK) == 0)
+		{
+			free_array(lst_path);
 			return (path);
+		}
 		free(path);
 		i++;
 	}
 	i = 0;
-	while (lst_path[i])
-		free(lst_path[++i]);
-	free(lst_path);
+	free_array(lst_path);
 	return (NULL);
 }
 

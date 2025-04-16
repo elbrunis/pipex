@@ -21,5 +21,6 @@
 
 void	execute(char **envp, char *argv);
 int		ft_error(char *str);
+void	free_array(char **array);
 
 #endif
