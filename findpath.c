@@ -69,20 +69,19 @@ void	execute(char **envp, char *argv)
 {
 	char	**cmd;
 	char	*path;
-	int		i;
 
-	i = -1;
 	if (argv[0] == '\0' || argv == NULL)
 		ft_error("escribe el comando");
 	cmd = ft_split(argv, ' ');
 	path = findpath(envp, cmd[0]);
 	if (!path)
 	{
-		while (cmd[++i])
-			free(cmd[i]);
-		free(cmd);
+		free_array(cmd);
 		ft_error("no se encontro el comando");
 	}
 	if (execve(path, cmd, envp) == -1)
+	{
+		free_array(cmd);
 		ft_error("no se pudo ejecutar el comando\n");
+	}
 }
