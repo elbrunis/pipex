@@ -44,9 +44,13 @@ static char	*findpath(char **envp, char *cmd)
 	char	*temp;
 
 	i = 0;
+	if (ft_strchr(cmd, '/') != NULL && access(cmd, X_OK) == 0)
+		return (cmd);
 	while (envp[i] && ft_strnstr(envp[i], "PATH", 4) == NULL)
 		i++;
 	lst_path = ft_split(envp[i] + 5, ':');
+	if(!lst_path)
+		ft_error("no path found");
 	i = 0;
 	while (lst_path[i])
 	{
@@ -71,17 +75,17 @@ void	execute(char **envp, char *argv)
 	char	*path;
 
 	if (argv[0] == '\0' || argv == NULL)
-		ft_error("escribe el comando");
+		ft_error("type the command");
 	cmd = ft_split(argv, ' ');
 	path = findpath(envp, cmd[0]);
 	if (!path)
 	{
 		free_array(cmd);
-		ft_error("no se encontro el comando");
+		ft_error("command not found");
 	}
 	if (execve(path, cmd, envp) == -1)
 	{
 		free_array(cmd);
-		ft_error("no se pudo ejecutar el comando\n");
+		ft_error("The command could not be executed");
 	}
 }
