@@ -6,7 +6,7 @@
 /*   By: biniesta <biniesta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 20:59:46 by biniesta          #+#    #+#             */
-/*   Updated: 2025/03/27 15:38:57 by biniesta         ###   ########.fr       */
+/*   Updated: 2025/04/22 11:32:29 by biniesta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,10 @@ static void	child_proces(int *fd, char **argv, char **envp)
 	execute(envp, argv[2]);
 }
 
-static void do_execute(char *argv[], char **envp, pid_t	pid1)
+static void	do_execute(char *argv[], char **envp, pid_t	pid1)
 {
 	pid_t	pid2;
+
 	pid2 = fork();
 	if (pid2 == -1)
 		ft_error("the fork could not be created");
@@ -40,7 +41,6 @@ static void do_execute(char *argv[], char **envp, pid_t	pid1)
 		waitpid(pid1, NULL, 0);
 		waitpid(pid2, NULL, 0);
 	}
-
 }
 
 static void	parent_proces(int *fd, char **argv, char **envp, pid_t	pid1)
@@ -55,7 +55,7 @@ static void	parent_proces(int *fd, char **argv, char **envp, pid_t	pid1)
 	close(fd[0]);
 	dup2(file, STDOUT_FILENO);
 	close(file);
-	do_execute(argv,envp, pid1);
+	do_execute(argv, envp, pid1);
 }
 
 int	main(int argc, char *argv[], char **envp)
@@ -75,8 +75,6 @@ int	main(int argc, char *argv[], char **envp)
 	if (pid1 == 0)
 		child_proces(fd, argv, envp);
 	else
-	{
 		parent_proces(fd, argv, envp, pid1);
-	}
 	return (0);
 }

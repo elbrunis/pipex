@@ -6,7 +6,7 @@
 /*   By: biniesta <biniesta@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 21:42:38 by biniesta          #+#    #+#             */
-/*   Updated: 2025/03/27 15:37:15 by biniesta         ###   ########.fr       */
+/*   Updated: 2025/04/22 11:34:24 by biniesta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	free_array(char **array)
 
 int	ft_error(char *str)
 {
-	ft_putstr_fd("Error: ", 2);
+	ft_putstr_fd("Error\n", 2);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("\n", 2);
 	exit(2);
@@ -49,7 +49,7 @@ static char	*findpath(char **envp, char *cmd)
 	while (envp[i] && ft_strnstr(envp[i], "PATH", 4) == NULL)
 		i++;
 	lst_path = ft_split(envp[i] + 5, ':');
-	if(!lst_path)
+	if (!lst_path)
 		ft_error("no path found");
 	i = 0;
 	while (lst_path[i])
@@ -57,16 +57,11 @@ static char	*findpath(char **envp, char *cmd)
 		path = ft_strjoin((temp = ft_strjoin(lst_path[i], "/")), cmd);
 		free(temp);
 		if (access(path, X_OK) == 0)
-		{
-			free_array(lst_path);
-			return (path);
-		}
+			return (free_array(lst_path), path);
 		free(path);
 		i++;
 	}
-	i = 0;
-	free_array(lst_path);
-	return (NULL);
+	return (free_array(lst_path), NULL);
 }
 
 void	execute(char **envp, char *argv)
